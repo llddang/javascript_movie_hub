@@ -1,6 +1,7 @@
 import { MovieDetailModal } from "../components/ui/movieDetailModal.js";
 import { BookmarkType } from "../types/bookmark.type.js";
 
+const movieContainer = document.getElementById("movie-container");
 const movieModal = new MovieDetailModal(BookmarkType.CANCEL);
 
 export function handleBookmarkMovieClick(e) {
@@ -21,9 +22,9 @@ export function getBookmarkSearchMovieList(e) {
 
   const keyword = e.target.value;
 
-  if (target)
+  if (keyword)
     return getAllBookmarkMovieList().filter((movie) =>
-      movie.title.contain(keyword)
+      movie.title.includes(keyword)
     );
 
   return getAllBookmarkMovieList();

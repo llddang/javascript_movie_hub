@@ -18,7 +18,7 @@ let currentPage = SitemapType.HOME;
 createMovieList();
 
 async function handleMovieSearchBoxChanged(e) {
-  const results = await getSearchMovieList();
+  const results = await getSearchMovieList(e);
   createMovieList(results);
 }
 
@@ -34,7 +34,7 @@ movieSearchBox.addEventListener(
   handleMovieSearchBoxChangedWithDebounce
 );
 
-homeButton.addEventListener("click", () => {
+homeButton.addEventListener("click", async () => {
   if (currentPage === SitemapType.HOME) return;
   currentPage = SitemapType.HOME;
   createMovieList();
@@ -46,9 +46,9 @@ bookmarkButton.addEventListener("click", () => {
   createMovieList();
 });
 
-async function createMovieList() {
+async function createMovieList(results) {
   movieContainer.innerHTML = ``;
-  const results = await getMovieList();
+  if (!results) results = await getMovieList();
 
   results.forEach(createMovieItem);
 }
@@ -95,12 +95,12 @@ function getHandleMovieClick() {
   }
 }
 
-async function getSearchMovieList() {
+async function getSearchMovieList(e) {
   switch (currentPage) {
     case SitemapType.HOME:
-      return getHomeSearchMovieList;
+      return await getHomeSearchMovieList(e);
     case SitemapType.BOOKMARK:
-      return getBookmarkSearchMovieList;
+      return getBookmarkSearchMovieList(e);
     default:
       return () => {};
   }

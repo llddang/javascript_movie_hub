@@ -1,6 +1,11 @@
 import { MovieDetailModal } from "../components/ui/movieDetailModal.js";
+import {
+  getPopularMovieList,
+  getSearchMovieList,
+} from "../lib/api/movie.api.js";
 import { BookmarkType } from "../types/bookmark.type.js";
 
+const movieContainer = document.getElementById("movie-container");
 const movieModal = new MovieDetailModal(BookmarkType.ADD);
 
 export function handleHomeMovieClick(e) {
@@ -18,7 +23,8 @@ export async function getHomeSearchMovieList(e) {
 
   const keyword = e.target.value;
 
-  if (target)
+  console.log(keyword);
+  if (keyword)
     return await getSearchMovieList(keyword).then((res) => res.results);
-  return await getPopularMovieList().then((res) => res.results);
+  else return await getPopularMovieList().then((res) => res.results);
 }
