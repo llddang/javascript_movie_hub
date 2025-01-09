@@ -5,6 +5,17 @@ export class MovieDetailModal extends Modal {
   constructor(type) {
     super();
     this.type = type;
+
+    this.loadCSS();
+  }
+
+  loadCSS() {
+    if (document.querySelector("#movie-modal-css")) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "../../styles/movieModal.css";
+    link.id = "movie-modal-css";
+    document.head.appendChild(link);
   }
 
   open(movie) {
