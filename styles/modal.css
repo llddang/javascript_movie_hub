@@ -14,7 +14,7 @@
   top: 50%;
   transform: translate(-50%, -50%);
   min-width: 30rem;
-  max-width: 80vw;
+  max-width: min(80vw, 40rem);
   min-height: 10rem;
   max-height: 70vh;
   padding: 1.25rem;
