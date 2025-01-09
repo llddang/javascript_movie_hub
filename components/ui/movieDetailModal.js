@@ -1,5 +1,6 @@
 import { BookmarkType } from "../../types/bookmark.type.js";
 import { Modal } from "../common/modal.js";
+import { Toast } from "../common/toast.js";
 
 export class MovieDetailModal extends Modal {
   constructor(type) {
@@ -18,8 +19,9 @@ export class MovieDetailModal extends Modal {
     document.head.appendChild(link);
   }
 
-  open(movie) {
+  open(movie, onClose) {
     this.movie = movie;
+    this.onClose = onClose || (() => {});
     const content = this.createContent();
 
     const modal = this.createModal(movie.title, content);
@@ -56,20 +58,30 @@ export class MovieDetailModal extends Modal {
 
     if (this.type === BookmarkType.ADD) {
       bookmarkButton.innerText = "북마크 추가";
-      bookmarkButton.addEventListener("click", this.handleAddBookmarkClick);
+      bookmarkButton.addEventListener("click", () =>
+        this.handleAddBookmarkClick()
+      );
     } else {
       bookmarkButton.innerText = "북마크 취소";
-      bookmarkButton.addEventListener("click", this.handleCancelBookmarkClick);
+      bookmarkButton.addEventListener("click", () =>
+        this.handleCancelBookmarkClick()
+      );
     }
 
     return bookmarkButton;
   }
 
-  handleCancelBookmarkClick() {
-    // TODO
+  handleAddBookmarkClick() {
+    localStorage.setItem(this.movie.id, JSON.stringify(this.movie));
+    this.onClose();
+    this.handleClose();
+    Toast.info("북마크에 추가했습니다.");
   }
 
-  handleAddBookmarkClick() {
-    // TODO
+  handleCancelBookmarkClick() {
+    localStorage.removeItem(this.movie.id);
+    this.onClose();
+    this.handleClose();
+    Toast.info("북마크에서 삭제했습니다.");
   }
 }
