@@ -1,0 +1,16 @@
+@import url("./modal.css");
+
+.movie-modal-poster {
+  width: 100%;
+}
+
+.movie-modal-title {
+  font-size: 1.25rem;
+}
+
+.movie-modal-bookmark-button {
+  background: #323232;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
