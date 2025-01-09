@@ -8,6 +8,7 @@
     />
     <title>영화 검색</title>
     <link rel="stylesheet" href="styles/index.css" />
+    <link rel="stylesheet" href="styles/toast.css" />
     <script
       src="https://kit.fontawesome.com/d9ee1435e4.js"
       crossorigin="anonymous"
@@ -15,13 +16,14 @@
   </head>
   <body>
     <header>
-      <h1>영화 검색</h1>
+      <button id="home-button"><h1>영화 검색</h1></button>
       <input id="movie-search-box" placeholder="영화를 검색하세요." />
-      <a href="/bookmark.html"> 북마크 보기 </a>
+      <button id="bookmark-button" href="/bookmark.html">북마크 보기</button>
     </header>
     <main>
       <ul id="movie-container"></ul>
     </main>
+    <div id="toast-container"></div>
     <script type="module" src="./scripts/index.js"></script>
   </body>
 </html>
