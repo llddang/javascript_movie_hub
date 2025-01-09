@@ -1,28 +1,24 @@
 export class Modal {
-  constructor(title, onClose, children) {
-    console.log(typeof onClose);
+  constructor() {}
 
-    this.onClose = onClose;
-
+  createModal(title, children) {
     const modalContent = this.createModalContent(children);
     const modalCloseButton = this.createModalCloseButton();
     const modalTitle = this.createModalTitle(title);
     const modalHead = this.createModalHead(modalTitle, modalCloseButton);
-    const modalContainer = this.createModalContainer(modalHead, modalContent);
+    this.modalContainer = this.createModalContainer(modalHead, modalContent);
 
-    const modalBackdrop = this.createModalBackdrop();
-
-    this.modalBackdrop = modalBackdrop;
-    this.modal = modalContainer;
+    return this.modalContainer;
   }
 
   createModalBackdrop() {
-    const backdrop = document.createElement("div");
-    backdrop.setAttribute("class", "modal-backdrop");
+    const modalBackdrop = document.createElement("div");
+    modalBackdrop.setAttribute("class", "modal-backdrop");
 
-    backdrop.addEventListener("click", this.handleClose.bind(this));
+    modalBackdrop.addEventListener("click", this.handleClose.bind(this));
 
-    return backdrop;
+    this.modalBackdrop = modalBackdrop;
+    return modalBackdrop;
   }
 
   createModalContainer(modalHead, modalContent) {
@@ -73,11 +69,10 @@ export class Modal {
     return modalContent;
   }
 
-  handleClose(e) {
+  handleClose() {
     document.body.style.overflow = "auto";
-    this.onClose();
 
-    this.modal.remove();
+    this.modalContainer.remove();
     this.modalBackdrop.remove();
   }
 }

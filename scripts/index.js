@@ -3,6 +3,7 @@ import { getPopularMovieList } from "../lib/api/movie.api.js";
 import { BookmarkType } from "../types/bookmark.type.js";
 
 const movieContainer = document.getElementById("movie-container");
+const movieModal = new MovieDetailModal(BookmarkType.ADD);
 
 await getPopularMovieList().then((res) => {
   res.results.forEach((movie) => {
@@ -32,5 +33,5 @@ function handleMovieContainerClick(e) {
   const contentStr = movieItem.getAttribute("data-content");
   const content = JSON.parse(contentStr);
 
-  new MovieDetailModal(content, BookmarkType.ADD);
+  movieModal.open(content);
 }

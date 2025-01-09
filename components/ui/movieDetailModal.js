@@ -1,17 +1,22 @@
 import { BookmarkType } from "../../types/bookmark.type.js";
 import { Modal } from "../common/modal.js";
 
-export class MovieDetailModal {
-  constructor(movie, type) {
-    this.movie = movie;
+export class MovieDetailModal extends Modal {
+  constructor(type) {
+    super();
     this.type = type;
+  }
 
+  open(movie) {
+    this.movie = movie;
     const content = this.createContent();
-    this.modal = new Modal(movie.title, () => {}, content);
+
+    const modal = this.createModal(movie.title, content);
+    const modalBackdrop = this.createModalBackdrop();
 
     document.body.style.overflow = "hidden";
-    document.body.append(this.modal.modalBackdrop);
-    document.body.append(this.modal.modal);
+    document.body.append(modalBackdrop);
+    document.body.append(modal);
   }
 
   createContent() {
