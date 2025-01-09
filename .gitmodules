@@ -1,0 +1,3 @@
+[submodule "sparta09_movie_hub_config"]
+	path = sparta09_movie_hub_config
+	url = https://github.com/llddang/sparta09_movie_hub_config.git
