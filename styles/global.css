@@ -1,8 +1,8 @@
 :root {
   font-family: "Pretendard";
+
   --main-black: #333333;
-  --main-white: #eeeeee;
-  --progress-width: 100%;
+  --main-gray: #bbbbbb;
 }
 
 html {
@@ -19,6 +19,11 @@ a {
   text-decoration: none;
   color: inherit;
   background: none;
+  border: none;
+}
+
+button {
+  background: transparent;
   border: none;
 }
 
