@@ -1,43 +1,57 @@
-import { MovieDetailModal } from "../components/ui/movieDetailModal.js";
-import {
-  getPopularMovieList,
-  getSearchMovieList,
-} from "../lib/api/movie.api.js";
+import { getPopularMovieList } from "../lib/api/movie.api.js";
 import { debounce } from "../lib/utils/debounce.util.js";
-import { BookmarkType } from "../types/bookmark.type.js";
+import { SitemapType } from "../types/sitemap.type.js";
+import {
+  getAllBookmarkMovieList,
+  getBookmarkSearchMovieList,
+  handleBookmarkMovieClick,
+} from "./bookmark.js";
+import { getHomeSearchMovieList, handleHomeMovieClick } from "./home.js";
 
 const movieContainer = document.getElementById("movie-container");
 const movieSearchBox = document.getElementById("movie-search-box");
-const movieModal = new MovieDetailModal(BookmarkType.ADD);
+const homeButton = document.getElementById("home-button");
+const bookmarkButton = document.getElementById("bookmark-button");
 
-function handleMovieContainerClick(e) {
-  const movieItem = e.target.closest(".movie-item");
-  if (!movieItem) return;
+let currentPage = SitemapType.HOME;
 
-  const contentStr = movieItem.getAttribute("data-content");
-  const content = JSON.parse(contentStr);
-
-  movieModal.open(content);
-}
+createMovieList();
 
 async function handleMovieSearchBoxChanged(e) {
-  while (movieContainer.firstChild) {
-    movieContainer.removeChild(movieContainer.firstChild);
-  }
-
-  if (e.target.value)
-    await getSearchMovieList(e.target.value).then((res) =>
-      res.results.forEach(createMovieItem)
-    );
-  else
-    await getPopularMovieList().then((res) => {
-      res.results.forEach(createMovieItem);
-    });
+  const results = await getSearchMovieList(e);
+  createMovieList(results);
 }
 
 const handleMovieSearchBoxChangedWithDebounce = debounce((e) =>
   handleMovieSearchBoxChanged(e)
 );
+
+movieContainer.addEventListener("click", (e) => {
+  getHandleMovieClick()(e);
+});
+movieSearchBox.addEventListener(
+  "keyup",
+  handleMovieSearchBoxChangedWithDebounce
+);
+
+homeButton.addEventListener("click", async () => {
+  if (currentPage === SitemapType.HOME) return;
+  currentPage = SitemapType.HOME;
+  createMovieList();
+});
+
+bookmarkButton.addEventListener("click", () => {
+  if (currentPage === SitemapType.BOOKMARK) return;
+  currentPage = SitemapType.BOOKMARK;
+  createMovieList();
+});
+
+async function createMovieList(results) {
+  movieContainer.innerHTML = ``;
+  if (!results) results = await getMovieList();
+
+  results.forEach(createMovieItem);
+}
 
 function createMovieItem(movie) {
   const item = document.createElement("li");
@@ -57,12 +71,37 @@ function createMovieItem(movie) {
   movieContainer.appendChild(item);
 }
 
-await getPopularMovieList().then((res) => {
-  res.results.forEach(createMovieItem);
-});
+async function getMovieList() {
+  switch (currentPage) {
+    case SitemapType.HOME:
+      return await getPopularMovieList().then((res) => res.results);
 
-movieContainer.addEventListener("click", handleMovieContainerClick);
-movieSearchBox.addEventListener(
-  "keyup",
-  handleMovieSearchBoxChangedWithDebounce
-);
+    case SitemapType.BOOKMARK:
+      return getAllBookmarkMovieList();
+  }
+
+  return [];
+}
+
+function getHandleMovieClick() {
+  console.log(currentPage);
+  switch (currentPage) {
+    case SitemapType.HOME:
+      return handleHomeMovieClick;
+    case SitemapType.BOOKMARK:
+      return handleBookmarkMovieClick;
+    default:
+      return () => {};
+  }
+}
+
+async function getSearchMovieList(e) {
+  switch (currentPage) {
+    case SitemapType.HOME:
+      return await getHomeSearchMovieList(e);
+    case SitemapType.BOOKMARK:
+      return getBookmarkSearchMovieList(e);
+    default:
+      return () => {};
+  }
+}
