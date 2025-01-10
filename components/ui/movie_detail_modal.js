@@ -14,7 +14,7 @@ export class MovieDetailModal extends Modal {
     if (document.querySelector("#movie-modal-css")) return;
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "../../styles/movieModal.css";
+    link.href = "../../styles/movie_modal.css";
     link.id = "movie-modal-css";
     document.head.appendChild(link);
   }
