@@ -1,12 +1,8 @@
-import { getPopularMovieList } from "../lib/api/movie.api.js";
+import { Bookmark } from "../components/ui/bookmark.js";
+import { Home } from "../components/ui/home.js";
+import { Movie } from "../components/ui/movie.js";
 import { debounce } from "../lib/utils/debounce.util.js";
 import { SitemapType } from "../types/sitemap.type.js";
-import {
-  getAllBookmarkMovieList,
-  getBookmarkSearchMovieList,
-  handleBookmarkMovieClick,
-} from "./bookmark.js";
-import { getHomeSearchMovieList, handleHomeMovieClick } from "./home.js";
 
 const movieContainer = document.getElementById("movie-container");
 const movieSearchBox = document.getElementById("movie-search-box");
@@ -15,11 +11,11 @@ const bookmarkButton = document.getElementById("bookmark-button");
 
 let currentPage = SitemapType.HOME;
 
-createMovieList();
+Movie.createMovieList(await Home.getMovieInfoList());
 
 async function handleMovieSearchBoxChanged(e) {
   const results = await getSearchMovieList(e);
-  createMovieList(results);
+  Movie.createMovieList(results);
 }
 
 const handleMovieSearchBoxChangedWithDebounce = debounce((e) =>
@@ -37,59 +33,23 @@ movieSearchBox.addEventListener(
 homeButton.addEventListener("click", async () => {
   if (currentPage === SitemapType.HOME) return;
   currentPage = SitemapType.HOME;
-  createMovieList();
+  const results = await Home.getMovieInfoList();
+  Movie.createMovieList(results);
 });
 
 bookmarkButton.addEventListener("click", () => {
   if (currentPage === SitemapType.BOOKMARK) return;
   currentPage = SitemapType.BOOKMARK;
-  createMovieList();
+  const results = Bookmark.getMovieInfoList();
+  Movie.createMovieList(results);
 });
 
-async function createMovieList(results) {
-  movieContainer.innerHTML = ``;
-  if (!results) results = await getMovieList();
-
-  results.forEach(createMovieItem);
-}
-
-function createMovieItem(movie) {
-  const item = document.createElement("li");
-  item.setAttribute("class", "movie-item");
-  item.setAttribute("data-id", movie.id);
-  item.setAttribute("data-content", JSON.stringify(movie));
-  item.innerHTML = `
-    <img
-      src="https://media.themoviedb.org/t/p/w220_and_h330_face/${movie.poster_path}"
-      alt="${movie.title} 포스터"
-    />
-    <div class="movie-content">
-      <p>${movie.title}</p>
-      평점 : ${movie.vote_average}
-    </div>
-  `;
-  movieContainer.appendChild(item);
-}
-
-async function getMovieList() {
-  switch (currentPage) {
-    case SitemapType.HOME:
-      return await getPopularMovieList().then((res) => res.results);
-
-    case SitemapType.BOOKMARK:
-      return getAllBookmarkMovieList();
-  }
-
-  return [];
-}
-
 function getHandleMovieClick() {
-  console.log(currentPage);
   switch (currentPage) {
     case SitemapType.HOME:
-      return handleHomeMovieClick;
+      return Home.handleMovieClick;
     case SitemapType.BOOKMARK:
-      return handleBookmarkMovieClick;
+      return Bookmark.handleMovieClick;
     default:
       return () => {};
   }
@@ -98,9 +58,9 @@ function getHandleMovieClick() {
 async function getSearchMovieList(e) {
   switch (currentPage) {
     case SitemapType.HOME:
-      return await getHomeSearchMovieList(e);
+      return await Home.getSearchMovieInfoList(e);
     case SitemapType.BOOKMARK:
-      return getBookmarkSearchMovieList(e);
+      return Bookmark.getSearchMovieInfoList(e);
     default:
       return () => {};
   }
