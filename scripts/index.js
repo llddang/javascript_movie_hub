@@ -3,6 +3,10 @@ import { Home } from "../components/ui/home.js";
 import { Movie } from "../components/ui/movie.js";
 import { debounce } from "../lib/utils/debounce.util.js";
 import { SitemapType } from "../types/sitemap.type.js";
+import {
+  getHandleMovieClick,
+  getSearchMovieList,
+} from "../components/ui/sitemap.js";
 
 const movieContainer = document.getElementById("movie-container");
 const movieSearchBox = document.getElementById("movie-search-box");
@@ -11,25 +15,22 @@ const bookmarkButton = document.getElementById("bookmark-button");
 
 let currentPage = SitemapType.HOME;
 
+/* 초기 영화 목록 띄우기 */
 Movie.createMovieList(await Home.getMovieInfoList());
 
-async function handleMovieSearchBoxChanged(e) {
-  const results = await getSearchMovieList(e);
-  Movie.createMovieList(results);
-}
-
-const handleMovieSearchBoxChangedWithDebounce = debounce((e) =>
-  handleMovieSearchBoxChanged(e)
-);
-
+/* 영화 포스터가 아닌 container에 이벤트 걸고, 이벤트 위임 */
 movieContainer.addEventListener("click", (e) => {
   getHandleMovieClick()(e);
 });
-movieSearchBox.addEventListener(
-  "keyup",
-  handleMovieSearchBoxChangedWithDebounce
-);
 
+/* input 이벤트 핸들러 + debounce 적용 */
+const handleSearchMovieListWithDebounce = debounce(async (e) => {
+  const results = await getSearchMovieList(e);
+  Movie.createMovieList(results);
+});
+movieSearchBox.addEventListener("keyup", handleSearchMovieListWithDebounce);
+
+/* HomeButton 클릭 시 이벤트 */
 homeButton.addEventListener("click", async () => {
   if (currentPage === SitemapType.HOME) return;
   currentPage = SitemapType.HOME;
@@ -37,31 +38,10 @@ homeButton.addEventListener("click", async () => {
   Movie.createMovieList(results);
 });
 
+/* BookmarkButton 클릭 시 이벤트 */
 bookmarkButton.addEventListener("click", () => {
   if (currentPage === SitemapType.BOOKMARK) return;
   currentPage = SitemapType.BOOKMARK;
   const results = Bookmark.getMovieInfoList();
   Movie.createMovieList(results);
 });
-
-function getHandleMovieClick() {
-  switch (currentPage) {
-    case SitemapType.HOME:
-      return Home.handleMovieClick;
-    case SitemapType.BOOKMARK:
-      return Bookmark.handleMovieClick;
-    default:
-      return () => {};
-  }
-}
-
-async function getSearchMovieList(e) {
-  switch (currentPage) {
-    case SitemapType.HOME:
-      return await Home.getSearchMovieInfoList(e);
-    case SitemapType.BOOKMARK:
-      return Bookmark.getSearchMovieInfoList(e);
-    default:
-      return () => {};
-  }
-}
