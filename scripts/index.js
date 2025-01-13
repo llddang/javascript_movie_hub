@@ -13,7 +13,7 @@ const movieSearchBox = document.getElementById("movie-search-box");
 const homeButton = document.getElementById("home-button");
 const bookmarkButton = document.getElementById("bookmark-button");
 
-let currentPage = SitemapType.HOME;
+window.currentPage = SitemapType.HOME;
 
 /* 초기 영화 목록 띄우기 */
 Movie.createMovieList(await Home.getMovieInfoList());
@@ -32,16 +32,16 @@ movieSearchBox.addEventListener("keyup", handleSearchMovieListWithDebounce);
 
 /* HomeButton 클릭 시 이벤트 */
 homeButton.addEventListener("click", async () => {
-  if (currentPage === SitemapType.HOME) return;
-  currentPage = SitemapType.HOME;
+  if (window.currentPage === SitemapType.HOME) return;
+  window.currentPage = SitemapType.HOME;
   const results = await Home.getMovieInfoList();
   Movie.createMovieList(results);
 });
 
 /* BookmarkButton 클릭 시 이벤트 */
 bookmarkButton.addEventListener("click", () => {
-  if (currentPage === SitemapType.BOOKMARK) return;
-  currentPage = SitemapType.BOOKMARK;
+  if (window.currentPage === SitemapType.BOOKMARK) return;
+  window.currentPage = SitemapType.BOOKMARK;
   const results = Bookmark.getMovieInfoList();
   Movie.createMovieList(results);
 });
