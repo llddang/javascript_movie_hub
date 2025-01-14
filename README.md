@@ -18,7 +18,9 @@
 <br>
 
 ## 🚀 트러블 슈팅
-- 
+#### - [CSS 너 왜 늦는거야? - FOUC](https://llddang-blog.tistory.com/56)
+#### - [Modal 클래스 개선하기: 메서드 추출을 통한 코드 구조화](https://llddang-blog.tistory.com/57)
+#### - [[JS] toast 구현하기](https://llddang-blog.tistory.com/58)
 
 <br>
 <br>
