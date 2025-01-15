@@ -17,9 +17,12 @@
   </head>
   <body>
     <header>
-      <button id="home-button"><h1>영화 검색</h1></button>
-      <input id="movie-search-box" placeholder="영화를 검색하세요." />
-      <button id="bookmark-button" href="/bookmark.html">북마크 보기</button>
+      <button id="logo-button"><h1 id="logo">The Movie</h1></button>
+      <button id="search-movie-button">
+        <input id="search-movie-input" class="hidden" />
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+      <button id="sitemap-toggle-button" data-go="BOOKMARK">북마크 보기</button>
     </header>
     <main>
       <ul class="movie-container"></ul>
