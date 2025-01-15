@@ -50,7 +50,6 @@ export class Toast {
         .getPropertyValue("right");
 
       toastBar.style.right = currentRight;
-      console.log(toastBar.style.transition);
       toastBar.style.transition = "none";
     });
 
