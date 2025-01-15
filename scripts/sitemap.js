@@ -26,7 +26,7 @@ export function drawSearchedMovieList(keyword) {
 }
 
 export function handleClickMovieItem(e) {
-  const movieItem = e.target.closest(".movie-item");
+  const movieItem = e.target.closest(".movie-card");
   if (!movieItem) return;
 
   const contentStr = movieItem.getAttribute("data-content");

@@ -11,19 +11,26 @@ export function drawMovieListUi(movies, doClearMovieContainer = false) {
 
 export function createMovieItemUi(movie) {
   const movieItemUI = document.createElement("li");
-  movieItemUI.setAttribute("class", "movie-item");
+  movieItemUI.setAttribute("class", "movie-card");
   movieItemUI.setAttribute("data-id", movie.id);
   movieItemUI.setAttribute("data-content", JSON.stringify(movie));
-  movieItemUI.innerHTML = `
-    <img
-      src="https://media.themoviedb.org/t/p/w220_and_h330_face/${movie.poster_path}"
-      alt="${movie.title} 포스터"
-    />
-    <div class="movie-content">
-      <p>${movie.title}</p>
-      평점 : ${movie.vote_average}
-    </div>
-  `;
+  movieItemUI.style.backgroundImage = `url("https://image.tmdb.org/t/p/w1280${movie.backdrop_path}")`;
+
+  movieItemUI.addEventListener("mouseenter", () => {
+    movieItemUI.style.backgroundImage = `linear-gradient(to bottom, rgba(0, 0, 0), rgba(0, 0, 0, 0.4)), url("https://image.tmdb.org/t/p/w1280${movie.backdrop_path}")`;
+    movieItemUI.innerHTML = `
+      <p class="movie-card-title">${movie.title}</p>
+      <p class="movie-card-description">
+        ${movie.overview.substring(0, 150)}
+        ${movie.overview.length > 150 ? "..." : ""}
+      </p>
+      <p class="movie-card-vote">평점 : ${movie.vote_average}</p>
+    `;
+  });
+  movieItemUI.addEventListener("mouseleave", () => {
+    movieItemUI.style.backgroundImage = `url("https://image.tmdb.org/t/p/w1280${movie.backdrop_path}")`;
+    movieItemUI.innerHTML = "";
+  });
   return movieItemUI;
 }
 

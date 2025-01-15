@@ -50,35 +50,37 @@ a {
 
 .movie-container {
   max-width: 1200px;
-  padding: 1.25rem;
   margin: auto;
-  padding-top: 11.25rem;
+  padding: 2rem;
+  padding-top: 6rem;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 2rem;
 }
 
-.movie-item {
+.movie-card {
   border-radius: 0.625rem;
   overflow: hidden;
   position: relative;
-  width: 160px;
-  height: 300px;
-  box-shadow: 2px 2px 5px rgba(33, 33, 33, 0.2);
-  img {
-    width: 100%;
-  }
-  .movie-content {
-    width: 100%;
-    padding: 0.25rem 0.5rem 0.5rem;
-    background: white;
-    position: absolute;
-    bottom: 0;
-    box-sizing: border-box;
-    p {
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-    }
-  }
+  max-width: 30rem;
+  width: 100%;
+  aspect-ratio: 2/1;
+  background-size: cover;
+  padding: 1.75rem 2rem;
+  box-sizing: border-box;
+  box-shadow: 3px 3px 20px rgba(255, 255, 255, 0.2);
+}
+
+.movie-card .movie-card-title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.movie-card .movie-card-vote {
+  position: absolute;
+  bottom: 0.625rem;
+}
+.movie-card > * {
+  margin-bottom: 1rem;
 }
