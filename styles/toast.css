@@ -1,4 +1,4 @@
-#toast-container {
+.toast-container {
   position: fixed;
   bottom: 1.25rem;
   right: 1.25rem;

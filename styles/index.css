@@ -30,7 +30,7 @@ a {
   font-size: 0.875rem;
 }
 
-#movie-container {
+.movie-container {
   max-width: 1200px;
   padding: 1.25rem;
   margin: auto;
