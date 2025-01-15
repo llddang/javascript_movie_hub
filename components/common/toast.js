@@ -1,9 +1,7 @@
 import { ToastType } from "../../types/toast.type.js";
 
 export class Toast {
-  constructor() {
-    this.loadCSS();
-  }
+  constructor() {}
 
   static icons = {
     [ToastType.INFO]: {
@@ -16,24 +14,17 @@ export class Toast {
     },
   };
 
-  loadCSS() {
-    if (document.querySelector("#toast-css")) return;
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "../../styles/toast.css";
-    link.id = "toast-css";
-    document.head.appendChild(link);
-  }
-
   static info(message) {
-    const toastContainer = document.getElementById("toast-container");
+    const toastContainer =
+      document.getElementsByClassName("toast-container")[0];
     const toast = this.createToast(message, ToastType.INFO);
 
     if (toastContainer) toastContainer.append(toast);
   }
 
   static error(message) {
-    const toastContainer = document.getElementById("toast-container");
+    const toastContainer =
+      document.getElementsByClassName("toast-container")[0];
     const toast = this.createToast(message, ToastType.ERROR);
 
     if (toastContainer) toastContainer.append(toast);
@@ -87,7 +78,7 @@ export class Toast {
   }
 
   static createToastContent(toastBar, toastIcon, message) {
-    const toast = document.createElement("div");
+    const toast = document.createElement("li");
     toast.setAttribute("class", "toast");
     toast.append(toastBar);
     toast.append(toastIcon);

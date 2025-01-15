@@ -1,69 +1,54 @@
-import { Bookmark } from "../components/ui/bookmark.js";
-import { Home } from "../components/ui/home.js";
-import { Movie } from "../components/ui/movie.js";
-import { debounce } from "../lib/utils/debounce.util.js";
-import { SitemapType } from "../types/sitemap.type.js";
 import {
-  getHandleMovieClick,
-  getSearchMovieList,
-} from "../components/ui/sitemap.js";
+  drawMovieList,
+  drawSearchedMovieList,
+  handleClickMovieItem,
+} from "./sitemap.js";
+import { SitemapType } from "../types/sitemap.type.js";
+import { debounce } from "../lib/utils/debounce.util.js";
 
-const movieContainer = document.getElementById("movie-container");
-const movieSearchBox = document.getElementById("movie-search-box");
-const homeButton = document.getElementById("home-button");
-const bookmarkButton = document.getElementById("bookmark-button");
+const $movieContainer = document.getElementsByClassName("movie-container")[0];
+const $movieSearchBox = document.getElementById("movie-search-box");
+const $homeButton = document.getElementById("home-button");
+const $bookmarkButton = document.getElementById("bookmark-button");
 
 window.currentPage = SitemapType.HOME;
-window.currentPageNumber = 1;
+window.currentPageNumber = 0;
 
 /* 초기 영화 목록 띄우기 */
-Movie.createMovieList(await Home.getMovieInfoList());
+drawMovieList();
 
-/* 영화 포스터가 아닌 container에 이벤트 걸고, 이벤트 위임 */
-movieContainer.addEventListener("click", (e) => {
-  getHandleMovieClick()(e);
+/* 영화 검색창 input 이벤트 핸들러 + debounce 적용 */
+const handleSearchMovieWithDebounce = debounce((e) => {
+  window.currentPageNumber = 0;
+  drawSearchedMovieList(e.target.value);
 });
+$movieSearchBox.addEventListener("keyup", handleSearchMovieWithDebounce);
 
-/* input 이벤트 핸들러 + debounce 적용 */
-const handleSearchMovieListWithDebounce = debounce(async (e) => {
-  const results = await getSearchMovieList(e.target.value);
-  Movie.createMovieList(results);
-});
-movieSearchBox.addEventListener("keyup", handleSearchMovieListWithDebounce);
+/* movie container click 이벤트 핸들러 + 이벤트 위임 */
+$movieContainer.addEventListener("click", handleClickMovieItem);
 
-/* HomeButton 클릭 시 이벤트 */
-homeButton.addEventListener("click", async () => {
-  if (window.currentPage === SitemapType.HOME) return;
-  window.currentPage = SitemapType.HOME;
-  window.currentPageNumber = 1;
-  const results = await Home.getMovieInfoList();
-  Movie.createMovieList(results);
-});
+/* page 변환 번튼 클릭 */
+$homeButton.addEventListener("click", () =>
+  handleSitemapClick(SitemapType.HOME)
+);
+$bookmarkButton.addEventListener("click", () =>
+  handleSitemapClick(SitemapType.BOOKMARK)
+);
+function handleSitemapClick(currentPage) {
+  if (window.currentPage === currentPage) return;
+  $movieSearchBox.value = "";
+  window.currentPage = currentPage;
+  window.currentPageNumber = 0;
+  drawMovieList();
+}
 
-/* BookmarkButton 클릭 시 이벤트 */
-bookmarkButton.addEventListener("click", () => {
-  if (window.currentPage === SitemapType.BOOKMARK) return;
-  window.currentPage = SitemapType.BOOKMARK;
-  const results = Bookmark.getMovieInfoList();
-  Movie.createMovieList(results);
-});
-
+/* 무한 스크롤 구현 */
 const maxScrollY = document.body.scrollHeight - window.innerHeight;
 const handleScrollChangedWithDeBounce = debounce(async () => {
   if (maxScrollY - window.scrollY >= 620) return;
   if (window.currentPage === SitemapType.BOOKMARK) return;
 
-  console.log(window.currentPageNumber);
-  let results;
-  if (movieSearchBox.value === "") {
-    results = await Home.getMovieInfoList(window.currentPageNumber + 1);
-    Movie.appendMovieItems(results);
-  } else {
-    results = await Home.getSearchMovieInfoList(
-      movieSearchBox.value,
-      window.currentPageNumber + 1
-    );
-    Movie.appendMovieItems(results);
-  }
+  if ($movieSearchBox.value === "") drawMovieList();
+  else drawSearchedMovieList($movieSearchBox.value);
 });
 window.addEventListener("scroll", handleScrollChangedWithDeBounce);

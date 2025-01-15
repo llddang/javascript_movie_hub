@@ -1,26 +1,15 @@
-import { BookmarkType } from "../../types/bookmark.type.js";
+import { MovieModalType } from "../../types/movie_modal.type.js";
 import { Modal } from "../common/modal.js";
 import { Toast } from "../common/toast.js";
 
-export class MovieDetailModal extends Modal {
-  constructor(type) {
+export class MovieModal extends Modal {
+  constructor() {
     super();
-    this.type = type;
-
-    this.loadCSS();
   }
 
-  loadCSS() {
-    if (document.querySelector("#movie-modal-css")) return;
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "../../styles/movie_modal.css";
-    link.id = "movie-modal-css";
-    document.head.appendChild(link);
-  }
-
-  open(movie, onClose) {
+  open(movie, type, onClose) {
     this.movie = movie;
+    this.type = type;
     this.onClose = onClose || (() => {});
     const content = this.createContent();
 
@@ -56,7 +45,7 @@ export class MovieDetailModal extends Modal {
     const bookmarkButton = document.createElement("button");
     bookmarkButton.setAttribute("class", "movie-modal-bookmark-button");
 
-    if (this.type === BookmarkType.ADD) {
+    if (this.type === MovieModalType.ADD) {
       bookmarkButton.innerText = "북마크 추가";
       bookmarkButton.addEventListener("click", () =>
         this.handleAddBookmarkClick()
