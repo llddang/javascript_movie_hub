@@ -45,3 +45,10 @@ bookmarkButton.addEventListener("click", () => {
   const results = Bookmark.getMovieInfoList();
   Movie.createMovieList(results);
 });
+
+const maxScrollY = document.body.scrollHeight - window.innerHeight;
+const handleScrollChangedWithDeBounce = debounce(async (e) => {
+  if (maxScrollY - window.screenY >= 320) return;
+  // TODO: append;
+});
+window.addEventListener("scroll", handleScrollChangedWithDeBounce);
