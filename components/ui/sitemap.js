@@ -13,12 +13,12 @@ export function getHandleMovieClick() {
   }
 }
 
-export async function getSearchMovieList(e) {
+export async function getSearchMovieList(keyword) {
   switch (currentPage) {
     case SitemapType.HOME:
-      return await Home.getSearchMovieInfoList(e);
+      return await Home.getSearchMovieInfoList(keyword);
     case SitemapType.BOOKMARK:
-      return Bookmark.getSearchMovieInfoList(e);
+      return Bookmark.getSearchMovieInfoList(keyword);
     default:
       return () => {};
   }

@@ -22,15 +22,22 @@ export class Home {
     });
   };
 
-  static async getMovieInfoList() {
-    return await getPopularMovieList().then((res) => res.results);
+  static async getMovieInfoList(page) {
+    return await getPopularMovieList(page).then((res) => {
+      window.currentPageNumber = res.page;
+      return res.results;
+    });
   }
 
-  static async getSearchMovieInfoList(e) {
-    const keyword = e.target.value;
-
+  static async getSearchMovieInfoList(keyword, page) {
     if (keyword)
-      return await getSearchMovieList(keyword).then((res) => res.results);
-    else return await getPopularMovieList().then((res) => res.results);
+      return await getSearchMovieList(keyword, page).then((res) => {
+        window.currentPageNumber = res.page;
+        return res.results;
+      });
+    return await getPopularMovieList().then((res) => {
+      window.currentPageNumber = res.page;
+      return res.results;
+    });
   }
 }

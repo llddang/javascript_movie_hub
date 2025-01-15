@@ -26,9 +26,7 @@ export class Bookmark {
       .map((key) => JSON.parse(localStorage.getItem(key)));
   }
 
-  static getSearchMovieInfoList(e) {
-    const keyword = e.target.value;
-
+  static getSearchMovieInfoList(keyword) {
     if (keyword)
       return this.getMovieInfoList().filter((movie) =>
         movie.title.includes(keyword)
