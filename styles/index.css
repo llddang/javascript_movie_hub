@@ -57,6 +57,7 @@ a {
     background: white;
     position: absolute;
     bottom: 0;
+    box-sizing: border-box;
     p {
       font-weight: 800;
       margin-bottom: 0.5rem;
