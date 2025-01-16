@@ -10,8 +10,6 @@ import { drawMovieListUi } from "../components/ui/draw_movie.js";
 import { SitemapType } from "../types/sitemap.type.js";
 import { drawMovieModalUi } from "../components/ui/movie_modal.js";
 
-/** 탭뷰 vs SPA  */
-
 export function drawMovieList() {
   if (window.currentPage === SitemapType.HOME) drawMovieListOfHome();
   if (window.currentPage === SitemapType.BOOKMARK) drawMovieListOfBookmark();
