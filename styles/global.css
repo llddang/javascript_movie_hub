@@ -38,7 +38,7 @@ input {
 }
 
 .hidden {
-  display: none;
+  visibility: hidden;
 }
 
 .skeleton-ui-circle {
