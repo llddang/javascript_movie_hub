@@ -8,7 +8,7 @@ import {
 } from "../lib/api/bookmark.api.js";
 import { drawMovieListUi } from "../components/ui/draw_movie.js";
 import { SitemapType } from "../types/sitemap.type.js";
-import { drawMovieModalUi } from "../components/ui/movie_modal.js";
+import MovieModal from "../components/ui/MovieModal.js";
 
 export function drawMovieList() {
   if (window.currentPage === SitemapType.HOME) drawMovieListOfHome();
@@ -23,11 +23,12 @@ export function drawSearchedMovieList(keyword) {
 }
 
 export function handleClickMovieCard(e) {
-  const movieItem = e.target.closest(".movie-card");
-  if (!movieItem) return;
+  const movieCard = e.target.closest(".movie-card");
+  if (!movieCard) return;
 
-  const movieInfo = JSON.parse(movieItem.getAttribute("data-movie-info"));
-  drawMovieModalUi(movieInfo, movieItem);
+  const movieInfo = JSON.parse(movieCard.getAttribute("data-movie-info"));
+  const { element, render } = MovieModal({ movieInfo, movieCard });
+  document.body.appendChild(element);
 }
 
 /* home 관련 */
