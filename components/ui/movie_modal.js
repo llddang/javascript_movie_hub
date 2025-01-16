@@ -1,62 +1,64 @@
 import { SitemapType } from "../../types/sitemap.type.js";
 import { Toast } from "../common/toast.js";
 
-const $movieModalWrapper = document.getElementsByClassName(
-  "movie-modal-wrapper"
-)[0];
-const $movieModalDim = document.getElementsByClassName("movie-modal-dim")[0];
-const $movieModal = document.getElementsByClassName("movie-modal")[0];
-const $toggleBookmarkButton = document.getElementById("toggle-bookmark-button");
-const $movieModalContent = document.getElementsByClassName(
-  "movie-modal-content"
-)[0];
-
-let _movieCard = null;
-
 export function drawMovieModalUi(movie, movieCard) {
-  $movieModalDim.src = `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`;
-  $movieModal.style.background = `top / contain no-repeat url("https://image.tmdb.org/t/p/w1280${movie.poster_path}")`;
+  const movieModalWrapper = document.createElement("div");
+  movieModalWrapper.className = "movie-modal-wrapper";
 
-  _movieCard = movieCard;
-  const movieInfo = JSON.parse(movieCard.getAttribute("data-movie-info"));
+  movieModalWrapper.innerHTML = `
+    <div class="movie-modal-wrapper">
+      <img class="movie-modal-dim" 
+          src="https://image.tmdb.org/t/p/w1280${movie.backdrop_path}" />
+      <div class="movie-modal">
+        <img class="movie-modal-poster-image" 
+            src="https://image.tmdb.org/t/p/w1280${movie.poster_path}" />
+        <div class="movie-modal-button-container">
+          <button id="toggle-bookmark-button">
+            ${
+              movie.isBookmarked
+                ? `<i class="fa-solid fa-star"></i>`
+                : `<i class="fa-regular fa-star"></i>`
+            }
+          </button>
+          <button id="close-movie-modal-button">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="movie-modal-content">
+          <p class="movie-modal-title">${movie.title}</p>
+          <p class="movie-modal-overview">${movie.overview}</p>
+          <p class="movie-modal-score">평점 : ${movie.vote_average}</p>
+        </div>
+      </div>
+    </div>`;
 
-  if (movieInfo.isBookmarked)
-    $toggleBookmarkButton.innerHTML = `<i class="fa-solid fa-star"></i>`;
-  else $toggleBookmarkButton.innerHTML = `<i class="fa-regular fa-star"></i>`;
-
-  $movieModalContent.innerHTML = ` 
-    <p class="movie-modal-title">${movie.title}</p>
-    <p class="movie-modal-overview">
-      ${movie.overview}
-    </p>
-    <p class="movie-modal-score">평점 : ${movie.vote_average}</p>`;
-
-  $movieModalWrapper.classList.remove("hidden");
+  movieModalWrapper.addEventListener("click", function (e) {
+    handleMovieModalClick.call(this, e, movieCard);
+  });
+  document.body.appendChild(movieModalWrapper);
 }
 
-$movieModalWrapper.addEventListener("click", (e) => handleMovieModalClick(e));
-
-function handleMovieModalClick(e) {
+function handleMovieModalClick(e, movieCard) {
   const movieModalDim = e.target.closest(".movie-modal-dim");
   const toggleBookmarkButton = e.target.closest("#toggle-bookmark-button");
   const closeMovieModalButton = e.target.closest("#close-movie-modal-button");
 
   if (!movieModalDim && !toggleBookmarkButton && !closeMovieModalButton) return;
 
-  if (toggleBookmarkButton) handleToggleBookmarkButtonClick();
-  $movieModalWrapper.classList.add("hidden");
+  if (toggleBookmarkButton) handleToggleBookmarkButtonClick(movieCard);
+  this.remove();
 }
 
-function handleToggleBookmarkButtonClick() {
-  const movieId = Number(_movieCard.getAttribute("data-id"));
-  const movieInfo = JSON.parse(_movieCard.getAttribute("data-movie-info"));
+function handleToggleBookmarkButtonClick(movieCard) {
+  const movieId = Number(movieCard.getAttribute("data-id"));
+  const movieInfo = JSON.parse(movieCard.getAttribute("data-movie-info"));
 
   movieInfo.isBookmarked = !movieInfo.isBookmarked;
-  _movieCard.setAttribute("data-movie-info", JSON.stringify(movieInfo));
+  movieCard.setAttribute("data-movie-info", JSON.stringify(movieInfo));
 
   if (movieInfo.isBookmarked)
     handleAddBookmarkClick(movieId, JSON.stringify(movieInfo));
-  else handleCancelBookmarkClick(movieId, _movieCard);
+  else handleCancelBookmarkClick(movieId, movieCard);
 }
 
 function handleAddBookmarkClick(movieId, movieInfo) {

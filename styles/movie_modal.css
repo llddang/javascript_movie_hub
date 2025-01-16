@@ -14,7 +14,7 @@
   object-fit: cover;
 }
 
-.movie-modal-container {
+.movie-modal {
   position: fixed;
   left: 50%;
   top: 50%;
@@ -40,13 +40,21 @@
 
 .movie-modal-button-container > * {
   font-size: 1.5rem;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: var(--color-black);
 }
 
 .movie-modal-content {
-  background: linear-gradient(to top, #0e0e0e 80%, rgba(0, 0, 0, 0) 100%);
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: linear-gradient(
+    to top,
+    var(--color-black) 80%,
+    rgba(0, 0, 0, 0) 100%
+  );
   margin-top: 30rem;
   padding: 4rem 1rem 1rem;
-  bottom: 0;
   line-height: 1.6;
 }
 

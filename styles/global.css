@@ -1,10 +1,11 @@
 :root {
   --color-default: white;
   --color-point: #ff9300;
+  --color-black: #0e0e0e;
 }
 
 html {
-  background: #0e0e0e;
+  background: var(--color-black);
 }
 
 body,
