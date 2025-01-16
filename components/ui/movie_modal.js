@@ -1,76 +1,73 @@
-import { MovieModalType } from "../../types/movie_modal.type.js";
-import { Modal } from "../common/modal.js";
+import { SitemapType } from "../../types/sitemap.type.js";
 import { Toast } from "../common/toast.js";
 
-export class MovieModal extends Modal {
-  constructor() {
-    super();
-  }
+export function drawMovieModalUi(movie, movieCard) {
+  const movieModalWrapper = document.createElement("div");
+  movieModalWrapper.className = "movie-modal-wrapper";
 
-  open(movie, type, onClose) {
-    this.movie = movie;
-    this.type = type;
-    this.onClose = onClose || (() => {});
-    const content = this.createContent();
+  movieModalWrapper.innerHTML = `
+    <div class="movie-modal-wrapper">
+      <img class="movie-modal-dim" 
+          src="https://image.tmdb.org/t/p/w1280${movie.backdrop_path}" />
+      <div class="movie-modal">
+        <img class="movie-modal-poster-image" 
+            src="https://image.tmdb.org/t/p/w1280${movie.poster_path}" />
+        <div class="movie-modal-button-container">
+          <button id="toggle-bookmark-button">
+            ${
+              movie.isBookmarked
+                ? `<i class="fa-solid fa-star"></i>`
+                : `<i class="fa-regular fa-star"></i>`
+            }
+          </button>
+          <button id="close-movie-modal-button">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="movie-modal-content">
+          <p class="movie-modal-title">${movie.title}</p>
+          <p class="movie-modal-overview">${movie.overview}</p>
+          <p class="movie-modal-score">평점 : ${movie.vote_average}</p>
+        </div>
+      </div>
+    </div>`;
 
-    const modal = this.createModal(movie.title, content);
-    const modalBackdrop = this.createModalBackdrop();
+  movieModalWrapper.addEventListener("click", function (e) {
+    handleMovieModalClick.call(this, e, movieCard);
+  });
+  document.body.appendChild(movieModalWrapper);
+}
 
-    document.body.style.overflow = "hidden";
-    document.body.append(modalBackdrop);
-    document.body.append(modal);
-  }
+function handleMovieModalClick(e, movieCard) {
+  const movieModalDim = e.target.closest(".movie-modal-dim");
+  const toggleBookmarkButton = e.target.closest("#toggle-bookmark-button");
+  const closeMovieModalButton = e.target.closest("#close-movie-modal-button");
 
-  createContent() {
-    const content = document.createElement("div");
-    content.style = "display: flex; flex-direction: column; gap: 1.25rem;";
-    content.innerHTML = `
-      <img
-        class="movie-modal-poster"
-        src="https://media.themoviedb.org/t/p/w220_and_h330_face/${this.movie.poster_path}"
-        alt="${this.movie.title} 포스터" />
-      <b style="movie-modal-title">${this.movie.title}</b>
-      <p>${this.movie.overview}</p>
-      <p><b>개봉일: </b>${this.movie.release_date}</p>
-      <p><b>평점: </b>${this.movie.vote_average}</p>
-    `;
+  if (!movieModalDim && !toggleBookmarkButton && !closeMovieModalButton) return;
 
-    const bookmarkButton = this.createBookmarkButton();
-    content.append(bookmarkButton);
+  if (toggleBookmarkButton) handleToggleBookmarkButtonClick(movieCard);
+  this.remove();
+}
 
-    return content;
-  }
+function handleToggleBookmarkButtonClick(movieCard) {
+  const movieId = Number(movieCard.getAttribute("data-id"));
+  const movieInfo = JSON.parse(movieCard.getAttribute("data-movie-info"));
 
-  createBookmarkButton() {
-    const bookmarkButton = document.createElement("button");
-    bookmarkButton.setAttribute("class", "movie-modal-bookmark-button");
+  movieInfo.isBookmarked = !movieInfo.isBookmarked;
+  movieCard.setAttribute("data-movie-info", JSON.stringify(movieInfo));
 
-    if (this.type === MovieModalType.ADD) {
-      bookmarkButton.innerText = "북마크 추가";
-      bookmarkButton.addEventListener("click", () =>
-        this.handleAddBookmarkClick()
-      );
-    } else {
-      bookmarkButton.innerText = "북마크 취소";
-      bookmarkButton.addEventListener("click", () =>
-        this.handleCancelBookmarkClick()
-      );
-    }
+  if (movieInfo.isBookmarked)
+    handleAddBookmarkClick(movieId, JSON.stringify(movieInfo));
+  else handleCancelBookmarkClick(movieId, movieCard);
+}
 
-    return bookmarkButton;
-  }
+function handleAddBookmarkClick(movieId, movieInfo) {
+  localStorage.setItem(movieId, movieInfo);
+  Toast.info("북마크에 추가했습니다.");
+}
 
-  handleAddBookmarkClick() {
-    localStorage.setItem(this.movie.id, JSON.stringify(this.movie));
-    this.onClose();
-    this.handleClose();
-    Toast.info("북마크에 추가했습니다.");
-  }
-
-  handleCancelBookmarkClick() {
-    localStorage.removeItem(this.movie.id);
-    this.onClose();
-    this.handleClose();
-    Toast.info("북마크에서 삭제했습니다.");
-  }
+function handleCancelBookmarkClick(movieId, movieCard) {
+  localStorage.removeItem(movieId);
+  Toast.info("북마크에서 삭제했습니다.");
+  if (window.currentPage === SitemapType.BOOKMARK) movieCard.remove();
 }

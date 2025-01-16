@@ -7,11 +7,8 @@ import {
   loadSearchedMovieListFromLocalStorage,
 } from "../lib/api/bookmark.api.js";
 import { drawMovieListUi } from "../components/ui/draw_movie.js";
-import { MovieModal } from "../components/ui/movie_modal.js";
 import { SitemapType } from "../types/sitemap.type.js";
-import { MovieModalType } from "../types/movie_modal.type.js";
-
-const movieModal = new MovieModal();
+import { drawMovieModalUi } from "../components/ui/movie_modal.js";
 
 export function drawMovieList() {
   if (window.currentPage === SitemapType.HOME) drawMovieListOfHome();
@@ -25,17 +22,12 @@ export function drawSearchedMovieList(keyword) {
     drawSearchedMovieListOBookmark(keyword);
 }
 
-export function handleClickMovieItem(e) {
-  const movieItem = e.target.closest(".movie-item");
+export function handleClickMovieCard(e) {
+  const movieItem = e.target.closest(".movie-card");
   if (!movieItem) return;
 
-  const contentStr = movieItem.getAttribute("data-content");
-  const content = JSON.parse(contentStr);
-
-  if (window.currentPage === SitemapType.HOME)
-    movieModal.open(content, MovieModalType.ADD);
-  if (window.currentPage === SitemapType.BOOKMARK)
-    movieModal.open(content, MovieModalType.CANCEL, () => movieItem.remove());
+  const movieInfo = JSON.parse(movieItem.getAttribute("data-movie-info"));
+  drawMovieModalUi(movieInfo, movieItem);
 }
 
 /* home 관련 */
@@ -43,7 +35,8 @@ export async function drawMovieListOfHome() {
   const response = await loadPopularMovieListFromTMDB(
     window.currentPageNumber + 1
   );
-  drawMovieListUi(response.results, response.page === 1);
+  const moviesWithBookmark = addBookmarkInfoToMovies(response.results);
+  drawMovieListUi(moviesWithBookmark, response.page === 1);
   window.currentPageNumber = response.page;
 }
 
@@ -56,7 +49,8 @@ export async function drawSearchedMovieListOfHome(keyword) {
     keyword,
     window.currentPageNumber + 1
   );
-  drawMovieListUi(response.results, response.page === 1);
+  const moviesWithBookmark = addBookmarkInfoToMovies(response.results);
+  drawMovieListUi(moviesWithBookmark, response.page === 1);
   window.currentPageNumber = response.page;
 }
 
@@ -69,4 +63,16 @@ export function drawMovieListOfBookmark() {
 export async function drawSearchedMovieListOBookmark(keyword) {
   const response = loadSearchedMovieListFromLocalStorage(keyword);
   drawMovieListUi(response, true);
+}
+
+/* 일반 영화 목록과 북마크 결합 */
+export function addBookmarkInfoToMovies(movies) {
+  const bookmarks = loadMovieListFromLocalStorage().map(
+    (bookmark) => bookmark.id
+  );
+
+  return movies.map((movie) => ({
+    ...movie,
+    isBookmarked: bookmarks.includes(movie.id),
+  }));
 }

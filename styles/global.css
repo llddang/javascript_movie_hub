@@ -1,12 +1,11 @@
 :root {
-  font-family: "Pretendard";
-
-  --main-black: #333333;
-  --main-gray: #bbbbbb;
+  --color-default: white;
+  --color-point: #ff9300;
+  --color-black: #0e0e0e;
 }
 
 html {
-  background: #ededed;
+  background: var(--color-black);
 }
 
 body,
@@ -28,14 +27,18 @@ button {
   color: inherit;
 }
 
-h1 {
-  font-size: 1.75rem;
+button {
+  cursor: pointer;
 }
 
 body,
 input {
   font-family: "Pretendard";
-  color: var(--main-black);
+  color: white;
+}
+
+.hidden {
+  display: none;
 }
 
 @font-face {
@@ -98,5 +101,13 @@ input {
   font-family: "Pretendard";
   src: url("./fonts/Pretendard-Black.woff2") format("woff2");
   font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "CWDangamAsac-Bold";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/CWDangamAsac-Bold.woff")
+    format("woff");
+  font-weight: normal;
   font-style: normal;
 }
