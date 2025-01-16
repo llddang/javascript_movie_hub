@@ -27,7 +27,7 @@ export function handleClickMovieCard(e) {
   if (!movieCard) return;
 
   const movieInfo = JSON.parse(movieCard.getAttribute("data-movie-info"));
-  const { element, render } = MovieModal({ movieInfo, movieCard });
+  const { element } = MovieModal({ movieInfo, movieCard });
   document.body.appendChild(element);
 }
 

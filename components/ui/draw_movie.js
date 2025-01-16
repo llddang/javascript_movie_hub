@@ -6,7 +6,7 @@ export function drawMovieListUi(movies, doClearMovieContainer = false) {
   if (doClearMovieContainer) clearMovieContainer();
 
   movies.forEach((movieInfo) => {
-    const { element, render } = MovieCard({ movieInfo });
+    const { element } = MovieCard({ movieInfo });
     $movieContainer.appendChild(element);
   });
 }
