@@ -5,11 +5,16 @@ export function drawMovieModalUi(movie, movieCard) {
   const movieModalWrapper = document.createElement("div");
   movieModalWrapper.className = "movie-modal-wrapper";
 
-  movieModalWrapper.innerHTML = `
+  const templateCode = (isNotLoaded) => `
     <div class="movie-modal-wrapper">
-      <img class="movie-modal-dim" 
+      ${
+        isNotLoaded
+          ? `<div class="movie-modal-dim"><div class="skeleton-ui-circle movie-modal-skeleton"></div></div>`
+          : ""
+      }
+      <img class="movie-modal-dim ${isNotLoaded && "hidden"}" 
           src="https://image.tmdb.org/t/p/w1280${movie.backdrop_path}" />
-      <div class="movie-modal">
+      <div class="movie-modal  ${isNotLoaded && "hidden"}">
         <img class="movie-modal-poster-image" 
             src="https://image.tmdb.org/t/p/w1280${movie.poster_path}" />
         <div class="movie-modal-button-container">
@@ -31,11 +36,18 @@ export function drawMovieModalUi(movie, movieCard) {
         </div>
       </div>
     </div>`;
-
+  movieModalWrapper.innerHTML = templateCode(true);
   movieModalWrapper.addEventListener("click", function (e) {
     handleMovieModalClick.call(this, e, movieCard);
   });
+  const movieModalPosterImage = movieModalWrapper.getElementsByClassName(
+    "movie-modal-poster-image"
+  )[0];
+  movieModalPosterImage.addEventListener("load", (e) => {
+    movieModalWrapper.innerHTML = templateCode(false);
+  });
   document.body.appendChild(movieModalWrapper);
+  document.body.style.overflow = "hidden";
 }
 
 function handleMovieModalClick(e, movieCard) {
@@ -47,6 +59,7 @@ function handleMovieModalClick(e, movieCard) {
 
   if (toggleBookmarkButton) handleToggleBookmarkButtonClick(movieCard);
   this.remove();
+  document.body.style.overflow = "auto";
 }
 
 function handleToggleBookmarkButtonClick(movieCard) {

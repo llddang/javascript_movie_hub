@@ -12,6 +12,7 @@
   height: 100%;
   opacity: 0.9;
   object-fit: cover;
+  background-color: var(--color-black);
 }
 
 .movie-modal {
@@ -31,6 +32,12 @@
   overflow-y: scroll;
 }
 
+.movie-modal-skeleton {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+}
+
 .movie-modal-button-container {
   position: absolute;
   right: 1rem;
@@ -46,6 +53,7 @@
 
 .movie-modal-content {
   position: absolute;
+  width: 100%;
   left: 0;
   top: 0;
   background: linear-gradient(
