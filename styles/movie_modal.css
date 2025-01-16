@@ -12,6 +12,7 @@
   height: 100%;
   opacity: 0.9;
   object-fit: cover;
+  background-color: var(--color-black);
 }
 
 .movie-modal {
@@ -21,14 +22,20 @@
   transform: translate(-50%, -50%);
   max-width: 80vw;
   width: 25rem;
-  height: 80vh;
-  box-sizing: border-box;
+  min-height: 65vh;
+  max-height: 80vh;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
   z-index: 21;
   box-shadow: 0 0 30px black;
   overflow-y: scroll;
+}
+
+.movie-modal-skeleton {
+  position: fixed;
+  left: 50%;
+  top: 50%;
 }
 
 .movie-modal-button-container {
@@ -46,8 +53,10 @@
 
 .movie-modal-content {
   position: absolute;
+  width: 100%;
   left: 0;
   top: 0;
+  box-sizing: border-box;
   background: linear-gradient(
     to top,
     var(--color-black) 80%,
