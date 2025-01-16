@@ -1,7 +1,7 @@
 import {
   drawMovieList,
   drawSearchedMovieList,
-  handleClickMovieItem,
+  handleClickMovieCard,
 } from "./sitemap.js";
 import { SitemapType } from "../types/sitemap.type.js";
 import { debounce } from "../lib/utils/debounce.util.js";
@@ -12,23 +12,24 @@ window.currentPageNumber = 0;
 const $logoButton = document.getElementById("logo-button");
 const $searchMovieButton = document.getElementById("search-movie-button");
 const $searchMovieInput = document.getElementById("search-movie-input");
-const $sitemapToggleButton = document.getElementById("sitemap-toggle-button");
+const $toggleSitemapButton = document.getElementById("toggle-sitemap-button");
 const $movieContainer = document.getElementsByClassName("movie-container")[0];
 
 /* page 변환 번튼 클릭 */
 $logoButton.addEventListener("click", () =>
   handleSitemapClick(SitemapType.HOME)
 );
-$sitemapToggleButton.addEventListener("click", (e) =>
+$toggleSitemapButton.addEventListener("click", (e) =>
   handleSitemapClick(e.target.getAttribute("data-go"))
 );
 function handleSitemapClick(goPage) {
   if (window.currentPage === goPage) return;
-  $sitemapToggleButton.innerText =
+  $toggleSitemapButton.innerText =
     goPage === SitemapType.HOME ? "북마크 보기" : "메인으로 돌아가기";
-  $sitemapToggleButton.setAttribute("data-go", window.currentPage);
+  $toggleSitemapButton.setAttribute("data-go", window.currentPage);
   window.currentPage = goPage;
   window.currentPageNumber = 0;
+  window.scrollTo(0, 0);
   drawMovieList();
 }
 
@@ -53,7 +54,7 @@ const handleSearchMovieWithDebounce = debounce((e) => {
 $searchMovieInput.addEventListener("keyup", handleSearchMovieWithDebounce);
 
 /* movie container click 이벤트 핸들러 + 이벤트 위임 */
-$movieContainer.addEventListener("click", handleClickMovieItem);
+$movieContainer.addEventListener("click", handleClickMovieCard);
 
 /* 무한 스크롤 구현 */
 const maxScrollY = document.body.scrollHeight - window.innerHeight;

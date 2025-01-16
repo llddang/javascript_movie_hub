@@ -22,12 +22,63 @@
         <input id="search-movie-input" class="hidden" />
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
-      <button id="sitemap-toggle-button" data-go="BOOKMARK">북마크 보기</button>
+      <button id="toggle-sitemap-button" data-go="BOOKMARK">북마크 보기</button>
     </header>
     <main>
       <ul class="movie-container"></ul>
     </main>
+    <div class="movie-modal-wrapper hidden">
+      <img class="movie-modal-dim" src="" />
+      <div class="movie-modal-container">
+        <div class="movie-modal">
+          <div class="movie-modal-button-container">
+            <button id="toggle-bookmark-button"></button>
+            <button id="close-movie-modal-button">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div class="movie-modal-content">
+            <p class="movie-modal-title">베놈: 라스트 댄스</p>
+            <p class="movie-modal-overview">
+              환상의 케미스트리의 에디 브록과 그의 심비오트 베놈은 그들을 노리는
+              정체불명 존재의 추격을 피해 같이 도망을 다니게 된다. 한편 베놈의
+              창조자 널은 고향 행성에서부터 그들을 찾아내기 위해 지구를 침략하고
+              에디와 베놈은 그동안 겪어보지 못한 최악의 위기를 맞이하게 되는데…
+            </p>
+            <p class="movie-modal-score">평점 : 6.8</p>
+          </div>
+        </div>
+      </div>
+    </div>
     <ul class="toast-container"></ul>
     <script type="module" src="./scripts/index.js"></script>
   </body>
 </html>
+
+<!-- 
+
+{
+            "adult": false,
+            "backdrop_path": "/vZG7PrX9HmdgL5qfZRjhJsFYEIA.jpg",
+            "genre_ids": [
+                28,
+                878,
+                12
+            ],
+            "id": 912649,
+            "original_language": "en",
+            "original_title": "Venom: The Last Dance",
+            "overview": "환상의 케미스트리의 에디 브록과 그의 심비오트 베놈은 그들을 노리는 정체불명 존재의 추격을 피해 같이 도망을 다니게 된다. 한편 베놈의 창조자 널은 고향 행성에서부터 그들을 찾아내기 위해 지구를 침략하고 에디와 베놈은 그동안 겪어보지 못한 최악의 위기를 맞이하게 되는데…",
+            "popularity": 1936.986,
+            "poster_path": "/3flIDcZF3tnR7m5OU2h7lLPQwmr.jpg",
+            "release_date": "2024-10-23",
+            "title": "베놈: 라스트 댄스",
+            "video": false,
+            "vote_average": 6.8,
+            "vote_count": 2341
+        },
+
+
+
+
+-->
