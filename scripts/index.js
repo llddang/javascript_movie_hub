@@ -53,7 +53,7 @@ $searchMovieInput.addEventListener("focusout", (e) => {
 const handleSearchMovieWithDebounce = debounce((e) => {
   window.currentPageNumber = 0;
   const moveList = getSearchedMovieList(e.target.value);
-  render(moveList);
+  renderMovieList(moveList);
 });
 $searchMovieInput.addEventListener("keyup", handleSearchMovieWithDebounce);
 

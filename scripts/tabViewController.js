@@ -55,10 +55,8 @@ export async function getMovieListOfHome() {
 }
 
 export async function getSearchedMovieListOfHome(keyword) {
-  if (keyword === "") {
-    getMovieListOfHome();
-    return;
-  }
+  if (keyword === "") return getMovieListOfHome();
+
   const response = await loadSearchedMovieListFromTMDB(
     keyword,
     window.currentPageNumber + 1
