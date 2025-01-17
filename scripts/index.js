@@ -1,8 +1,9 @@
 import {
-  drawMovieList,
-  drawSearchedMovieList,
+  renderMovieList,
+  getMovieList,
+  getSearchedMovieList,
   handleClickMovieCard,
-} from "./sitemap.js";
+} from "./tabViewController.js";
 import { SitemapType } from "../types/sitemap.type.js";
 import { debounce } from "../lib/utils/debounce.util.js";
 
@@ -14,6 +15,10 @@ const $searchMovieButton = document.getElementById("search-movie-button");
 const $searchMovieInput = document.getElementById("search-movie-input");
 const $toggleSitemapButton = document.getElementById("toggle-sitemap-button");
 const $movieContainer = document.getElementsByClassName("movie-container")[0];
+
+/* 초기 영화 목록 띄우기 */
+const movieList = getMovieList();
+renderMovieList(movieList);
 
 /* page 변환 번튼 클릭 */
 $logoButton.addEventListener("click", () =>
@@ -30,7 +35,8 @@ function handleSitemapClick(goPage) {
   window.currentPage = goPage;
   window.currentPageNumber = 0;
   window.scrollTo(0, 0);
-  drawMovieList();
+  const movieList = getMovieList();
+  renderMovieList(movieList);
 }
 
 /* 검색 버튼 click 이벤트 및 focus out 이벤트 */
@@ -43,13 +49,11 @@ $searchMovieInput.addEventListener("focusout", (e) => {
   $searchMovieInput.classList.add("hidden");
 });
 
-/* 초기 영화 목록 띄우기 */
-drawMovieList();
-
 /* 영화 검색창 input 이벤트 핸들러 + debounce 적용 */
 const handleSearchMovieWithDebounce = debounce((e) => {
   window.currentPageNumber = 0;
-  drawSearchedMovieList(e.target.value);
+  const moveList = getSearchedMovieList(e.target.value);
+  render(moveList);
 });
 $searchMovieInput.addEventListener("keyup", handleSearchMovieWithDebounce);
 
@@ -57,12 +61,14 @@ $searchMovieInput.addEventListener("keyup", handleSearchMovieWithDebounce);
 $movieContainer.addEventListener("click", handleClickMovieCard);
 
 /* 무한 스크롤 구현 */
-const maxScrollY = document.body.scrollHeight - window.innerHeight;
 const handleScrollChangedWithDeBounce = debounce(async () => {
+  const maxScrollY = document.body.scrollHeight - window.innerHeight;
   if (maxScrollY - window.scrollY >= 620) return;
   if (window.currentPage === SitemapType.BOOKMARK) return;
 
-  if ($searchMovieInput.value === "") drawMovieList();
-  else drawSearchedMovieList($searchMovieInput.value);
+  let movieList;
+  if ($searchMovieInput.value === "") movieList = getMovieList();
+  else movieList = getSearchedMovieList($searchMovieInput.value);
+  renderMovieList(movieList);
 });
 window.addEventListener("scroll", handleScrollChangedWithDeBounce);
