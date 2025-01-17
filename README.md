@@ -1,9 +1,21 @@
-# 🎞 sparta09_movie_hub
 
+<div align="center">
+<img width="300px" src="https://github.com/user-attachments/assets/79ac8be9-8cba-4c5a-bed4-051d585b3275" alt="웹사이트 로고" />
+</div>
+
+# 🎞 THE MOVIE: movie-hub
+
+![스크린샷 2025-01-17 오전 10 14 44](https://github.com/user-attachments/assets/aeda6081-760b-43fa-94a4-24db808d3dff)
+![스크린샷 2025-01-17 오전 10 15 05](https://github.com/user-attachments/assets/3e20e2f6-f48e-40c3-a0be-f2875a47a83a)
+![스크린샷 2025-01-17 오전 10 15 11](https://github.com/user-attachments/assets/2ea7dbab-3816-41c7-ac70-24010ca7e710)
 <br/>
 
 ## 💬 프로젝트 소개
-  TMDB Open API를 활용한 영화 소개 웹 사이트입니다.
+> 📅 개발 기간 : 2025. 01. 09 ~ 2025. 01. 17 (총 7일)
+>
+> 다양한 영화를 검색하고, 원하는 영화를 북마크하여 저장할 수 있는 웹 애플리케이션입니다.
+> TMDB Open API를 활용해 인기 영화를 실시간으로 불러오고, 검색 기능과 북마크 기능을 통해 더 나은 사용자 경험을 제공합니다.
+> 간단한 반응형 디자인을 적용하여 PC 환경에서 최적화되어 있으며, 모바일 환경은 지원하지 않습니다.
 
 <br>
 <br>
@@ -21,9 +33,9 @@
 <br>
 
 ## 🚀 트러블 슈팅
-#### - [CSS 너 왜 늦는거야? - FOUC](https://llddang-blog.tistory.com/56)
-#### - [Modal 클래스 개선하기: 메서드 추출을 통한 코드 구조화](https://llddang-blog.tistory.com/57)
-#### - [[JS] toast 구현하기](https://llddang-blog.tistory.com/58)
+ - ### [CSS 너 왜 늦는거야? - FOUC](https://llddang-blog.tistory.com/56)
+ - ### [Modal 클래스 개선하기: 메서드 추출을 통한 코드 구조화](https://llddang-blog.tistory.com/57)
+ - ### [[JS] toast 구현하기](https://llddang-blog.tistory.com/58)
 
 <br>
 <br>
@@ -34,22 +46,25 @@
 📁
 |- components /
 |   |- common /
-|   |   |- 공통으로 사용되는 class를 모았습니다. (modal, toast)
+|   |   |- 공통으로 사용되는 class를 모았습니다. (toast)
 |   |
 |   |- ui /
-|      |- 특정 ui에서만 사용되는 class을 모았습니다. (movie, home, bookmark)
+|      |- 특정 ui에서 사용되는 함수 컴포넌트를 모았습니다. (MovieModal, MovieCard)
 |
 |- lib /
 |   |- api /
 |   |- utils/
 |
-|- scripts/index.js
+|- scripts/
+|   |-index.js
+|   |-tabViewController.js
 |
 |- styles/
 |   |- fonts/
 |   |- *.css
 |
 |- types/
+|- constants/
 |
 |- index.html
 ```
