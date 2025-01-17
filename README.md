@@ -36,6 +36,7 @@
  - ### [CSS 너 왜 늦는거야? - FOUC](https://llddang-blog.tistory.com/56)
  - ### [Modal 클래스 개선하기: 메서드 추출을 통한 코드 구조화](https://llddang-blog.tistory.com/57)
  - ### [[JS] toast 구현하기](https://llddang-blog.tistory.com/58)
+ - ### [바닐라 JS 코드 리팩토링 스토리: 컴포넌트 설계 변화 탐구](https://llddang-blog.tistory.com/60)
 
 <br/>
 <br/>
