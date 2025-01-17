@@ -6,20 +6,33 @@ import {
   loadMovieListFromLocalStorage,
   loadSearchedMovieListFromLocalStorage,
 } from "../lib/api/bookmark.api.js";
-import { drawMovieListUi } from "../components/ui/draw_movie.js";
 import { SitemapType } from "../types/sitemap.type.js";
 import MovieModal from "../components/ui/MovieModal.js";
+import MovieCard from "../components/ui/MovieCard.js";
 
-export function drawMovieList() {
-  if (window.currentPage === SitemapType.HOME) drawMovieListOfHome();
-  if (window.currentPage === SitemapType.BOOKMARK) drawMovieListOfBookmark();
+export async function renderMovieList(movies) {
+  const $movieContainer = document.getElementsByClassName("movie-container")[0];
+  if (window.currentPageNumber === 0) $movieContainer.innerHTML = "";
+
+  Promise.resolve(movies).then((res) => {
+    res.forEach((movieInfo) => {
+      const { element } = MovieCard({ movieInfo });
+      $movieContainer.appendChild(element);
+    });
+  });
 }
 
-export function drawSearchedMovieList(keyword) {
-  if (window.currentPage === SitemapType.HOME)
-    drawSearchedMovieListOfHome(keyword);
+export function getMovieList() {
+  if (window.currentPage === SitemapType.HOME) return getMovieListOfHome();
   if (window.currentPage === SitemapType.BOOKMARK)
-    drawSearchedMovieListOBookmark(keyword);
+    return getMovieListOfBookmark();
+}
+
+export function getSearchedMovieList(keyword) {
+  if (window.currentPage === SitemapType.HOME)
+    return getSearchedMovieListOfHome(keyword);
+  if (window.currentPage === SitemapType.BOOKMARK)
+    return getSearchedMovieListOBookmark(keyword);
 }
 
 export function handleClickMovieCard(e) {
@@ -32,18 +45,18 @@ export function handleClickMovieCard(e) {
 }
 
 /* home 관련 */
-export async function drawMovieListOfHome() {
+export async function getMovieListOfHome() {
   const response = await loadPopularMovieListFromTMDB(
     window.currentPageNumber + 1
   );
   const moviesWithBookmark = addBookmarkInfoToMovies(response.results);
-  drawMovieListUi(moviesWithBookmark, response.page === 1);
   window.currentPageNumber = response.page;
+  return moviesWithBookmark;
 }
 
-export async function drawSearchedMovieListOfHome(keyword) {
+export async function getSearchedMovieListOfHome(keyword) {
   if (keyword === "") {
-    drawMovieListOfHome();
+    getMovieListOfHome();
     return;
   }
   const response = await loadSearchedMovieListFromTMDB(
@@ -51,19 +64,21 @@ export async function drawSearchedMovieListOfHome(keyword) {
     window.currentPageNumber + 1
   );
   const moviesWithBookmark = addBookmarkInfoToMovies(response.results);
-  drawMovieListUi(moviesWithBookmark, response.page === 1);
   window.currentPageNumber = response.page;
+  return moviesWithBookmark;
 }
 
 /* bookmark 관련 */
-export function drawMovieListOfBookmark() {
+export function getMovieListOfBookmark() {
   const response = loadMovieListFromLocalStorage();
-  drawMovieListUi(response, true);
+  window.currentPageNumber = 0;
+  return response;
 }
 
-export async function drawSearchedMovieListOBookmark(keyword) {
+export async function getSearchedMovieListOBookmark(keyword) {
   const response = loadSearchedMovieListFromLocalStorage(keyword);
-  drawMovieListUi(response, true);
+  window.currentPageNumber = 0;
+  return response;
 }
 
 /* 일반 영화 목록과 북마크 결합 */
